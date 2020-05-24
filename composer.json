@@ -1,0 +1,21 @@
+{
+  "name": "php7bundle/telegram-client",
+  "type": "extension",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Yamshikov Vitaliy",
+      "email": "theyamshikov@yandex.ru"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    
+  },
+  "autoload": {
+    "psr-4": {
+      "PhpBundle\\TelegramClient\\": "src",
+      "PhpBundle\\TelegramClient\\Tests\\": "tests"
+    }
+  }
+}
