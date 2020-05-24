@@ -10,7 +10,8 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "php7fork/danog_madelineproto": "v0.0.3"
+    "php7fork/danog_madelineproto": "v0.0.3",
+    "amphp/file": "v1.1.x-dev"
   },
   "autoload": {
     "psr-4": {
