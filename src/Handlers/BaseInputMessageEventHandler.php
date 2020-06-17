@@ -10,7 +10,7 @@ use Exception;
 abstract class BaseInputMessageEventHandler extends BaseEventHandler
 {
 
-    abstract protected function definitions();
+    abstract public function definitions();
 
     /**
      * Handle updates from users.
