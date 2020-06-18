@@ -7,6 +7,11 @@ use PhpLab\Core\Helpers\StringHelper;
 class MatchHelper
 {
 
+    public static function isLogin(string $value) {
+        //return $value[0] == '@';
+        return preg_match('/@[\d\w]+/i', $value);
+    }
+
     public static function isMatchTextContains(string $text, string $needle): bool
     {
         $needleArray = self::stringToArray($needle);
