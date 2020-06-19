@@ -4,27 +4,24 @@ namespace PhpBundle\TelegramClient\Actions;
 
 use danog\MadelineProto\APIFactory;
 use PhpBundle\TelegramClient\Base\BaseAction;
+use PhpBundle\TelegramClient\Entities\MessageEntity;
 
 class SendRandomMessageAction extends BaseAction
 {
 
     private $responseList;
 
-    public function __construct(APIFactory $messages, array $responseList)
+    public function __construct(array $responseList)
     {
-        parent::__construct($messages);
+        parent::__construct();
         $this->responseList = $responseList;
     }
 
-    public function run($update)
+    public function run(MessageEntity $messageEntity)
     {
         $count = count($this->responseList);
         $randIndex = mt_rand(0, $count - 1);
-        return $this->messages->sendMessage([
-            'peer' => $update,
-            'message' => $this->responseList[$randIndex],
-            //'reply_to_msg_id' => isset($update['message']['id']) ? $update['message']['id'] : null,
-        ]);
+        return $this->response->sendMessage($this->responseList[$randIndex], $messageEntity->getUserId());
     }
 
 }

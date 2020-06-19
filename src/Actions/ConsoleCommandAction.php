@@ -5,27 +5,20 @@ namespace PhpBundle\TelegramClient\Actions;
 use danog\MadelineProto\APIFactory;
 use danog\MadelineProto\EventHandler;
 use PhpBundle\TelegramClient\Base\BaseAction;
+use PhpBundle\TelegramClient\Entities\MessageEntity;
 
 class ConsoleCommandAction extends BaseAction
 {
 
-    public function run($update)
+    public function run(MessageEntity $messageEntity)
     {
-        $command = $update['message']['message'];
+        $command = $messageEntity->getMessage();
         $command = ltrim($command, ' ~');
         if(empty($command)) {
-            return $this->messages->sendMessage([
-                'peer' => $update,
-                'message' => 'Empty',
-                'reply_to_msg_id' => isset($update['message']['id']) ? $update['message']['id'] : null,
-            ]);
+            return $this->response->sendMessage('Empty', $messageEntity->getUserId(), $messageEntity->getId());
         }
         $result = shell_exec($command) ?? 'Completed!';
-        return $this->messages->sendMessage([
-            'peer' => $update,
-            'message' => $result,
-            'reply_to_msg_id' => isset($update['message']['id']) ? $update['message']['id'] : null,
-        ]);
+        return $this->response->sendMessage($result, $messageEntity->getUserId(), $messageEntity->getId(),);
     }
 
 }
