@@ -31,12 +31,7 @@ class SendButtonAction extends BaseAction
         $responseEntity->setChatId($chatId);
         $responseEntity->setText($this->text);
 
-        $responseEntity->setKeyboard([
-            "keyboard" => $this->buttons,
-            /*'one_time_keyboard' => false,
-            'resize_keyboard' => true,
-            'selective' => true,*/
-        ]);
+        $responseEntity->setKeyboard($this->buttons);
         $responseEntity->setParseMode('HTML');
         $responseEntity->setDisableWebPagePreview('false');
         $responseEntity->setDisableNotification('false');
