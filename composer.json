@@ -10,7 +10,7 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "amphp/file": "v1.1.x-dev"
+    "amphp/file": "v1.0.2"
   },
   "autoload": {
     "psr-4": {
