@@ -24,7 +24,7 @@ class SendButtonAction extends BaseAction
     public function run(RequestEntity $requestEntity)
     {
         $messageEntity = $requestEntity->getMessage();
-        $fromId = $messageEntity->getFrom()->getId();
+        //$fromId = $messageEntity->getFrom()->getId();
         $chatId = $messageEntity->getChat()->getId();
 
         $responseEntity = new ResponseEntity;
@@ -37,11 +37,9 @@ class SendButtonAction extends BaseAction
             'resize_keyboard' => true,
             'selective' => true,*/
         ]);
-        //$responseEntity->setMethod('sendMedia');
         $responseEntity->setParseMode('HTML');
         $responseEntity->setDisableWebPagePreview('false');
         $responseEntity->setDisableNotification('false');
         return $this->response->send($responseEntity);
     }
-
 }
