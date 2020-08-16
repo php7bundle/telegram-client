@@ -2,10 +2,11 @@
 
 namespace PhpBundle\TelegramClient\Actions;
 
+use App\Core\Entities\RequestEntity;
+use App\Core\Entities\ResponseEntity;
 use danog\MadelineProto\APIFactory;
 use PhpBundle\TelegramClient\Base\BaseAction;
 use PhpBundle\TelegramClient\Entities\MessageEntity;
-use PhpBundle\TelegramClient\Entities\ResponseEntity;
 
 class SendGeoAction extends BaseAction
 {
@@ -15,12 +16,17 @@ class SendGeoAction extends BaseAction
         parent::__construct();
     }
 
-    public function run(MessageEntity $messageEntity)
+    public function run(RequestEntity $requestEntity)
     {
+        $messageEntity = $requestEntity->getMessage();
+        $fromId = $messageEntity->getFrom()->getId();
+        $chatId = $messageEntity->getChat()->getId();
         $longStr = '73.10441998' . mt_rand(1000, 9999);
         $latStr = '49.80095066' . mt_rand(1000, 9999);
+
         $responseEntity = new ResponseEntity;
-        $responseEntity->setUserId($messageEntity->getUserId());
+        $responseEntity->setChatId($chatId);
+        $responseEntity->setText('kjhgfd');
         $responseEntity->setMedia([
             '_' => 'inputMediaGeoPoint',
             'geo_point' => [
@@ -30,7 +36,25 @@ class SendGeoAction extends BaseAction
             ],
         ]);
         $responseEntity->setMethod('sendMedia');
-        $responseEntity->setReplyMessageId($messageEntity->getId());
+        $responseEntity->setParseMode('HTML');
+        $responseEntity->setDisableWebPagePreview('false');
+        $responseEntity->setDisableNotification('false');
+        //$this->send($responseEntity);
+
+
+
+        /*$responseEntity = new ResponseEntity;
+        $responseEntity->setUserId($messageEntity->getFrom()->getId());
+        $responseEntity->setMedia([
+            '_' => 'inputMediaGeoPoint',
+            'geo_point' => [
+                '_' => 'inputGeoPoint',
+                'long' => $longStr,
+                'lat' => $latStr,
+            ],
+        ]);
+        $responseEntity->setMethod('sendMedia');
+        $responseEntity->setReplyMessageId($messageEntity->getId());*/
         return $this->response->send($responseEntity);
     }
 
