@@ -12,7 +12,7 @@ use danog\MadelineProto\messages;
 use Illuminate\Container\Container;
 use PhpBundle\TelegramClient\Entities\MessageEntity;
 
-abstract class BaseAction
+abstract class BaseAction2
 {
 
     /** @var SessionService */

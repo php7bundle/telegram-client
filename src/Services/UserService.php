@@ -24,7 +24,7 @@ class UserService
 
     public function authByUpdate($update) {
         $user = new UserTelegramEntity;
-        $user->setId($update['message']['user_id']);
+        $user->setId($update['message']['user_id'] ?? $update['message']['from_id']);
         $user->setUpdate($update);
         $this->user = $user;
     }

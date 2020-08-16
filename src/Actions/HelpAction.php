@@ -14,7 +14,7 @@ class HelpAction extends BaseAction
     /** @var BaseInputMessageEventHandler */
     public $eventHandler;
 
-    public function __construct(BaseInputMessageEventHandler $eventHandler)
+    public function __construct(/*BaseInputMessageEventHandler*/ $eventHandler)
     {
         parent::__construct();
         $this->eventHandler = $eventHandler;

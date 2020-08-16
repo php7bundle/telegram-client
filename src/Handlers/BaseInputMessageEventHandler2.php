@@ -2,6 +2,7 @@
 
 namespace PhpBundle\TelegramClient\Handlers;
 
+use App\Core\Entities\RequestEntity;
 use PhpBundle\TelegramClient\Services\ResponseService;
 use PhpBundle\TelegramClient\Services\SessionService;
 use PhpBundle\TelegramClient\Services\StateService;
@@ -15,7 +16,7 @@ use PhpBundle\TelegramClient\Interfaces\MatcherInterface;
 use danog\MadelineProto\RPCErrorException;
 use Exception;
 
-abstract class BaseInputMessageEventHandler extends BaseEventHandler
+abstract class BaseInputMessageEventHandler2 /*extends BaseEventHandler*/
 {
 
     private $_definitions;
@@ -48,22 +49,15 @@ abstract class BaseInputMessageEventHandler extends BaseEventHandler
         }
     }
 
-    /**
-     * Handle updates from users.
-     *
-     * @param array $update Update
-     *
-     * @return \Generator
-     */
-    public function onUpdateNewMessage(array $update): \Generator
+    public function onUpdateNewMessage(RequestEntity $requestEntity)
     {
         try {
-            $isEmptyAuthor = empty($update['message']['user_id']) && empty($update['message']['from_id']);
+            /*$isEmptyAuthor = empty($update['message']['user_id']) && empty($update['message']['from_id']);
             $isEmptyMessage = $update['message']['_'] === 'messageEmpty';
             if ($isEmptyAuthor || $isEmptyMessage || $update['message']['out'] ?? false) {
                 return;
-            }
-            yield $this->handleMessage($update, $this->messages);
+            }*/
+            $this->handleMessage($requestEntity);
         } catch (RPCErrorException $e) {
             $this->report("--report: Surfaced: $e");
         } catch (Exception $e) {
@@ -74,34 +68,42 @@ abstract class BaseInputMessageEventHandler extends BaseEventHandler
     }
 
     /**
-     * @param $update
+     * @param $requestEntity
      * @return mixed
      */
-    private function handleMessage($update, APIFactory $messages)
+    private function handleMessage(RequestEntity $requestEntity)
     {
-        $this->auth($update);
-        $action = $this->getStateFromSession();
-        $this->prepareResponse($messages);
+        //dd($requestEntity);
+        //$this->auth($requestEntity);
+        //$action = $this->getStateFromSession();
+        //$this->prepareResponse($messages);
         $assoc = $this->getDefinisions();
+        //dd($assoc);
         foreach ($assoc as $item) {
-            $isActive = empty($item['state']) || ($item['state'] == '*' && !empty($action)) || ($item['state'] == $action);
+            //$isActive = empty($item['state']) || ($item['state'] == '*' && !empty($action)) || ($item['state'] == $action);
+            $isActive = 1;
             if($isActive) {
+
                 /** @var MatcherInterface $matcherInstance */
                 $matcherInstance = $item['matcher'];
                 /** @var BaseAction $actionInstance */
                 $actionInstance = $item['action'];
-                if ($matcherInstance->isMatch($update)) {
-                    $this->humanizeResponseDelay($update);
 
-                    $messageEntity = new MessageEntity;
-                    $messageEntity->setId($update['message']['id']);
-                    $messageEntity->setUserId($update['message']['user_id'] ?? $update['message']['from_id']);
-                    $messageEntity->setMessage($update['message']['message']);
+                if ($matcherInstance->isMatch($requestEntity)) {
+                    $this->humanizeResponseDelay($requestEntity);
+                    //dump($actionInstance);
+
+                    /*$messageEntity = new MessageEntity;
+                    $messageEntity->setId($requestEntity['message']['id']);
+                    $messageEntity->setUserId($requestEntity['message']['user_id'] ?? $requestEntity['message']['from_id']);
+                    $messageEntity->setMessage($requestEntity['message']['message']);*/
 
                     //$messageId = isset($update['message']['id']) ? $update['message']['id'] : null;
                     //$userId = isset($update['message']['user_id']) ? $update['message']['user_id'] : null;
 
-                    return $actionInstance->run($messageEntity);
+                    //dd($actionInstance);
+
+                    $actionInstance->run($requestEntity);
                 }
             }
         }

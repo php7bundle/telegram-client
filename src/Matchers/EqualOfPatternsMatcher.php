@@ -2,6 +2,7 @@
 
 namespace PhpBundle\TelegramClient\Matchers;
 
+use App\Core\Entities\RequestEntity;
 use PhpBundle\TelegramClient\Helpers\MatchHelper;
 use PhpBundle\TelegramClient\Interfaces\MatcherInterface;
 
@@ -15,9 +16,9 @@ class EqualOfPatternsMatcher implements MatcherInterface
         $this->patterns = $patterns;
     }
 
-    public function isMatch(array $update): bool
+    public function isMatch(RequestEntity $requestEntity): bool
     {
-        $message = $update['message']['message'];
+        $message = $requestEntity->getMessage()->getText();
         foreach ($this->patterns as $pattern) {
             if(MatchHelper::isMatchText($message, $pattern)) {
                 return true;

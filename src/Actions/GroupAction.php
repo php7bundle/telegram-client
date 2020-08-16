@@ -2,9 +2,8 @@
 
 namespace PhpBundle\TelegramClient\Actions;
 
+use App\Core\Entities\RequestEntity;
 use PhpBundle\TelegramClient\Base\BaseAction;
-use danog\MadelineProto\APIFactory;
-use PhpBundle\TelegramClient\Entities\MessageEntity;
 
 class GroupAction extends BaseAction
 {
@@ -18,10 +17,10 @@ class GroupAction extends BaseAction
         $this->actions = $actions;
     }
 
-    public function run(MessageEntity $messageEntity)
+    public function run(RequestEntity $requestEntity)
     {
         foreach ($this->actions as $actionInstance) {
-            yield $actionInstance->run($messageEntity);
+            $actionInstance->run($requestEntity);
         }
     }
 

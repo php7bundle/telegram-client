@@ -2,15 +2,17 @@
 
 namespace PhpBundle\TelegramClient\Actions;
 
+use App\Core\Entities\RequestEntity;
 use PhpBundle\TelegramClient\Base\BaseAction;
+use PhpBundle\TelegramClient\Base\BaseAction2;
 use PhpBundle\TelegramClient\Entities\MessageEntity;
 
-class EchoAction extends BaseAction
+class EchoAction extends BaseAction2
 {
 
-    public function run(MessageEntity $messageEntity)
+    public function run(RequestEntity $requestEntity)
     {
-        return $this->response->sendMessage(json_encode($messageEntity, JSON_PRETTY_PRINT), $_ENV['ADMIN_LOGIN'], $messageEntity->getId());
+        $this->response->sendMessage($requestEntity->getMessage()->getChat()->getId(), $requestEntity->getMessage()->getText());
     }
 
 }
